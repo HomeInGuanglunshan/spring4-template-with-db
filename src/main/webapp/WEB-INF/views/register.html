@@ -1,0 +1,92 @@
+<html>
+<head>
+<title>REGISTER</title>
+<script src="${basePath}/js/jquery-3.3.1.min.js"></script>
+</head>
+<body>
+	<center>
+		<h1>REGISTER</h1>
+		<input id="principal" type="text" placeholder="email" /><br /> <br />
+		<input id="credential" type="password" placeholder="password" /><br /><br />
+		<input id="credentialRepeated" type="password" placeholder="password repeated" /><br /> <br />
+		<input id="verificationCode" type="password" placeholder="verification code" /><br /><br />
+		<button id="getCode">get code</button>
+		<button id="register">register</button>
+	</center>
+</body>
+<script type="text/javascript">
+$(document).ready(function() {
+	$("#getCode").click(function() {
+		
+		if ($("#principal").val() == "") {
+			alert("Please enter your email");
+			return;
+		}
+		if ($("#credential").val() == "") {
+			alert("Please enter your password");
+			return;
+		}
+		if ($("#credential").val() != $("#credentialRepeated").val()) {
+			alert("The passwords you entered twice are not the same, please check");
+			return;
+		}
+		
+		$.ajax({
+			type : "POST",
+			url : "${basePath}/getCode",
+			data : {
+				principal : $("#principal").val()
+			},
+			success : function(result) {
+				if (result && result.status == true) {
+					alert(result.message);
+				} else {
+// 					var message = (result && result.message) ? ("\n" + result.message) : "";
+					alert("Getting code fails : " + result.message);
+				}
+			},
+			dataType : "json"
+		})
+	});
+	
+	$("#register").click(function() {
+		
+		if ($("#principal").val() == "") {
+			alert("Please enter your email");
+			return;
+		}
+		if ($("#credential").val() == "") {
+			alert("Please enter your password");
+			return;
+		}
+		if ($("#credential").val() != $("#credentialRepeated").val()) {
+			alert("The passwords you entered twice are not the same, please check");
+			return;
+		}
+		if ($("#verificationCode").val() == "") {
+			alert("Please enter the verification code you received");
+			return;
+		}
+		
+		$.ajax({
+			type : "POST",
+			url : "${basePath}/register",
+			data : {
+				principal : $("#principal").val(),
+				credential : $("#credential").val(),
+				verificationCode : $("#verificationCode").val()
+			},
+			success : function(result) {
+				if (result && result.status == true) {
+					alert(result.message);
+					window.location.href = "${basePath}/goLogining";
+				} else {
+					alert("Registering fails : " + result.message);
+				}
+			},
+			dataType : "json"
+		})
+	});
+})
+</script>
+</html>

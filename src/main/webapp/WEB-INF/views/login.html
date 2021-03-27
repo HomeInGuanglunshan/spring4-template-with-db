@@ -1,0 +1,54 @@
+<html>
+<head>
+<title>LOGIN</title>
+<script src="${basePath}/js/jquery-3.3.1.min.js"></script>
+</head>
+<body>
+	<center>
+		<h1>LOGIN</h1>
+		<input id="principal" type="text" placeholder="email" /><br /> <br />
+		<input id="credential" type="password" placeholder="password" /><br /><br />
+		<button id="login">login</button><br /> <br />
+		<a href="${basePath}/">just look around</a><br /> <br />
+		<a href="${basePath}/goRegistering">go registering</a>
+	</center>
+</body>
+<script type="text/javascript">
+$(document).ready(function() {
+	
+	document.onkeypress = function (e) {
+		var charCode;
+		if (window.event) {
+			e = window.event;
+			charCode = (e.type == "keypress") ? e.keyCode : 0;
+		} else {
+			charCode = e.which;
+		}
+		if (charCode == 13) {
+			//点击Enter时执行的方法
+			$("#login").click();
+		}
+	}
+	
+	$("#login").click(function() {
+		$.ajax({
+			type : "POST",
+			url : "${basePath}/login",
+			data : {
+				principal : $("#principal").val(),
+				credential : $("#credential").val()
+			},
+			success : function(result) {
+				if (result && result.status == true) {
+					window.location.href = "${basePath}/";
+				} else {
+// 					var message = (result && result.message) ? ("\n" + result.message) : "";
+					alert("Login fails : " + result.message);
+				}
+			},
+			dataType : "json"
+		})
+	})
+})
+</script>
+</html>

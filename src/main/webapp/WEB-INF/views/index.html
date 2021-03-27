@@ -1,0 +1,42 @@
+<html>
+<head>
+<title>INDEX</title>
+<script src="${basePath}/js/jquery-3.3.1.min.js"></script>
+</head>
+<body>
+<center>
+1<br />
+2<br />
+3<br />
+4<br />
+5<br />
+<@shiro.user>
+<img src="${basePath}/img/windows.jpg" /><br /><br />
+<button id="logout">log out</button>
+</@shiro.user>
+<@shiro.guest>
+you can see more after <a href="${basePath}/goLogining">login</a>
+</@shiro.guest>
+</center>
+</body>
+<script type="text/javascript">
+$(document).ready(function() {
+	$("#logout").click(function() {
+		$.ajax({
+			type : "POST",
+			url : "${basePath}/logout",
+			data : {},
+			success : function(result) {
+				if (result && result.status == true) {
+					window.location.reload(true);
+				} else {
+// 					var message = (result && result.message) ? ("\n" + result.message) : "";
+					alert("Logout fails : " + result.message);
+				}
+			},
+			dataType : "json"
+		})
+	})
+})
+</script>
+</html>
